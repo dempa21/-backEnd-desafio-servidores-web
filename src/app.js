@@ -9,16 +9,16 @@ const ProductManager = require('./programa.js');
  * que nos ofrece express.
  */
 const app = express();
-
+const productManager = new ProductManager();
 
 app.get('/bienvenida',function(req,res) {
     res.sendFile('./src/index.html' , { root: '.' });
   });
-
+  
 
 app.get('/products', async (req,res) => {
-  const productosA = await fs.promises.readFile('./files/Productos.json', 'utf-8');
-  const productos = JSON.parse(productosA);
+  
+  const productos = await productManager.getAll();
   const {query, limit} = req.query;
   let productsFiltrados = [...productos]
 
@@ -31,8 +31,7 @@ app.get('/products', async (req,res) => {
 
 app.get("/products/:pid", async function(req, res) {
 
-  const productosA = await fs.promises.readFile('./files/Productos.json', 'utf-8');
-  const productos = JSON.parse(productosA);
+  const productos = await productManager.getAll();
   const idProducto = Number(req.params.pid);
   const producto = productos.find((p) => p.id === idProducto);
   if (!producto) return res.send({ error: "Producto no encontrado" });

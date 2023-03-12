@@ -1,24 +1,24 @@
 const fs = require('fs');
 
 class ProductManager {
-    constructor(file) {
-        this.file = file;
+    constructor() {
+        this.path = './files/Productos.json';
 }
 
 
     writeFile = async data => {
         try {
             await fs.promises.writeFile(
-                this.file, JSON.stringify(data, null, 2)
+                this.path, JSON.stringify(data, null, 2)
             )
         } catch (err) {
             console.log(`error: ${err}`);
         }
     }
-
-    getAll = async() => {
+  
+        getAll = async() => {
         try {
-            const productos = await fs.promises.readFile(this.file, 'utf-8');
+            const productos = await fs.promises.readFile('./files/Productos.json', 'utf-8');
             return JSON.parse(productos)
         } catch(err) {
             if(err.message.includes('no such file or directory')) return [];
